@@ -16,6 +16,9 @@ extern "C" {
 
 #include "hdtd/string-util.h"
 
+#include "hdtd/partition.h"
+#include "hdtd/disk.h"
+
 #ifdef __cplusplus
 }
 #endif

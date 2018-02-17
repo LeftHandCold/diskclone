@@ -25,17 +25,6 @@ struct hd_disk_s
 
 typedef hd_disk *(hd_disk_open_fn)(hd_context *ctx, const char *diskname);
 
-/*
-	hd_document_recognize_fn: Recognize a document type from
-	a magic string.
-
-	magic: string to recognise - typically a filename or mime
-	type.
-
-	Returns a number between 0 (not recognized) and 100
-	(fully recognized) based on how certain the recognizer
-	is that this is of the required type.
-*/
 typedef int (hd_disk_recognize_fn)(hd_context *ctx, const char *diskname);
 
 struct hd_disk_handler_s
