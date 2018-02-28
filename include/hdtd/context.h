@@ -115,11 +115,49 @@ void *hd_malloc(hd_context *ctx, size_t size);
 void *hd_calloc(hd_context *ctx, size_t count, size_t size);
 
 /*
+	hd_malloc_struct: Allocate storage for a structure (with scavenging),
+	clear it, and (in Memento builds) tag the pointer as belonging to a
+	struct of this type.
+
+	CTX: The context.
+
+	STRUCT: The structure type.
+
+	Returns a pointer to allocated (and cleared) structure. Throws
+	exception on failure to allocate.
+*/
+#define hd_malloc_struct(CTX, STRUCT) \
+	((STRUCT *)Memento_label(hd_calloc(CTX,1,sizeof(STRUCT)), #STRUCT))
+
+/*
+	hd_malloc_no_throw: Allocate a block of memory (with scavenging)
+
+	size: The number of bytes to allocate.
+
+	Returns a pointer to the allocated block. May return NULL if size is
+	0. Returns NULL on failure to allocate.
+*/
+void *hd_malloc_no_throw(hd_context *ctx, size_t size);
+
+/*
 	hd_free: Frees an allocation.
 
 	Does not throw exceptions.
 */
 void hd_free(hd_context *ctx, void *p);
+
+/*
+	hd_flush_warnings: Flush any repeated warnings.
+
+	Repeated warnings are buffered, counted and eventually printed
+	along with the number of repetitions. Call hd_flush_warnings
+	to force printing of the latest buffered warning and the
+	number of repetitions, for example to make sure that all
+	warnings are printed before exiting an application.
+
+	Does not throw exceptions.
+*/
+void hd_flush_warnings(hd_context *ctx);
 
 struct hd_context_s
 {
@@ -129,4 +167,37 @@ struct hd_context_s
     hd_disk_handler_context *src;
 };
 
+/*
+	hd_new_context: Allocate context containing global state.
+
+	The global state contains an exception stack, resource store,
+	etc. Most functions in MuPDF take a context argument to be
+	able to reference the global state. See hd_drop_context for
+	freeing an allocated context.
+
+	alloc: Supply a custom memory allocator through a set of
+	function pointers. Set to NULL for the standard library
+	allocator. The context will keep the allocator pointer, so the
+	data it points to must not be modified or freed during the
+	lifetime of the context.
+
+	Does not throw exceptions, but may return NULL.
+*/
+hd_context *hd_new_context_imp(const hd_alloc_context *alloc, const char *version);
+
+#define hd_new_context(alloc) hd_new_context_imp(alloc, HD_VERSION);
+
+/*
+	hd_drop_context: Free a context and its global state.
+
+	The context and all of its global state is freed, and any
+	buffered warnings are flushed (see hd_flush_warnings). If NULL
+	is passed in nothing will happen.
+
+	Does not throw exceptions.
+*/
+void hd_drop_context(hd_context *ctx);
+
+/* Default allocator */
+extern hd_alloc_context hd_alloc_default;
 #endif //DISKCLONE_HDTD_CONTEXT_H

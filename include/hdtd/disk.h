@@ -8,6 +8,8 @@
 #include "hdtd/system.h"
 #include "hdtd/context.h"
 
+#define DEFAULT_SECTOR_SIZE       512
+
 /*
 	Disk interface
 */
@@ -22,6 +24,7 @@ typedef int (hd_disk_probe_fn)(hd_context *ctx, hd_disk *disk);
 struct hd_disk_s
 {
 	int refs;
+
 	hd_disk_drop_fn *drop_disk;
     hd_disk_probe_fn *probe_disk;
 };
@@ -37,7 +40,7 @@ struct hd_disk_handler_s
 };
 
 /*
-	hd_new_disk: Create and initialize a disk struct.
+	hd_new_disk: Create and initialize a disk structs.
 */
 void *hd_new_disk_of_size(hd_context *ctx, int size);
 
@@ -45,19 +48,32 @@ void *hd_new_disk_of_size(hd_context *ctx, int size);
 
 void hd_register_disk_handler(hd_context *ctx, const hd_disk_handler *handler);
 
-/*
-	hd_register_disk_handler: Register handlers
-	for all the standard disk types supported in
-	this build.
-*/
+/**
+ * hd_register_disk_handler: Register handlers
+ * for all the standard disk types supported in
+ * this build.
+ * @param ctx
+ */
 void hd_register_disk_handlers(hd_context *ctx);
 
+/**
+ * hd_open_disk: Open or created a disk structs.
+ * @param ctx
+ * @param diskname
+ * @return hd_disk
+ */
 hd_disk *hd_open_disk(hd_context *ctx, const char *diskname);
 
 void hd_drop_disk(hd_context *ctx, hd_disk *disk);
 
-
+/**
+ * hd_open_dev: Open the device.
+ * @param ctx
+ * @param diskname : device's name.
+ * @return handle
+ */
 int hd_open_dev(hd_context *ctx, const char *diskname);
 
+void hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size);
 
 #endif //DISKCLONE_HDTD_DISK_H

@@ -21,6 +21,8 @@
 #include <fcntl.h> /* O_RDONLY & co */
 #include <time.h>
 
+#include <stdbool.h>
+
 #include <setjmp.h>
 
 #include "memento.h"
