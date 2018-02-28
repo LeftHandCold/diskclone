@@ -7,10 +7,23 @@
 
 #include "system.h"
 
+/*
+	Contexts
+*/
+typedef struct hd_alloc_context_s hd_alloc_context;
 typedef struct hd_error_context_s hd_error_context;
 typedef struct hd_error_stack_slot_s hd_error_stack_slot;
 typedef struct hd_warn_context_s hd_warn_context;
+typedef struct hd_disk_handler_context_s hd_disk_handler_context;
 typedef struct hd_context_s hd_context;
+
+struct hd_alloc_context_s
+{
+    void *user;
+    void *(*malloc)(void *, size_t);
+    void *(*realloc)(void *, void *, size_t);
+    void (*free)(void *, void *);
+};
 
 struct hd_error_stack_slot_s
 {
@@ -79,11 +92,41 @@ struct hd_warn_context_s
 	int count;
 };
 
+/*
+	hd_malloc: Allocate a block of memory (with scavenging)
+
+	size: The number of bytes to allocate.
+
+	Returns a pointer to the allocated block. May return NULL if size is
+	0. Throws exception on failure to allocate.
+*/
+void *hd_malloc(hd_context *ctx, size_t size);
+
+/*
+	hd_calloc: Allocate a zeroed block of memory (with scavenging)
+
+	count: The number of objects to allocate space for.
+
+	size: The size (in bytes) of each object.
+
+	Returns a pointer to the allocated block. May return NULL if size
+	and/or count are 0. Throws exception on failure to allocate.
+*/
+void *hd_calloc(hd_context *ctx, size_t count, size_t size);
+
+/*
+	hd_free: Frees an allocation.
+
+	Does not throw exceptions.
+*/
+void hd_free(hd_context *ctx, void *p);
+
 struct hd_context_s
 {
-	void *user;
-	hd_error_context *error;
-	hd_warn_context *warn;
+    const hd_alloc_context *alloc;
+    hd_error_context *error;
+    hd_warn_context *warn;
+    hd_disk_handler_context *src;
 };
 
 #endif //DISKCLONE_HDTD_CONTEXT_H
