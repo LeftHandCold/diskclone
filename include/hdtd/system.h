@@ -46,6 +46,7 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h> /* needed for int64_t */
 #endif
 
+#include <sys/stat.h>
 /*
 	Some differences in libc can be smoothed over
 */

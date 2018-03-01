@@ -5,6 +5,10 @@
 #ifndef DISKCLONE_HDTDCONFIG_H
 #define DISKCLONE_HDTDCONFIG_H
 
+#ifndef HD_ENABLE_GPT
+#define HD_ENABLE_GPT 1
+#endif /* HD_ENABLE_GPT */
+
 #ifndef HD_ENABLE_DOS
 #define HD_ENABLE_DOS 1
 #endif /* HD_ENABLE_DOS */
