@@ -52,6 +52,8 @@ typedef unsigned __int64 uint64_t;
 */
 
 #ifdef __APPLE__
+
+#include <unistd.h>
 #define HAVE_SIGSETJMP
 #elif defined(__unix) && !defined(__NACL__)
 #define HAVE_SIGSETJMP

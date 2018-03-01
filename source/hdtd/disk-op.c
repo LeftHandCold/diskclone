@@ -15,10 +15,7 @@ void
 hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size)
 {
     ssize_t r;
-    ssize_t t;
 
-    lseek(fd, 0, SEEK_END);
-    t = tell(fd);
     r = lseek(fd, start, SEEK_SET);
     if (r == -1) {
         hd_throw(ctx, HD_ERROR_GENERIC, "failed to seek to offset %d: %lu, errno %d", size, start, errno);
