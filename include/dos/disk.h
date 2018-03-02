@@ -14,7 +14,6 @@ struct dos_disk_s
     int dev_fd;         /* device descriptor */
 
     unsigned char *first_sector; /* buffer with master boot record */
-    uint32_t sector_size;
 };
 
 #endif //DISKCLONE_DOS_DISK_H

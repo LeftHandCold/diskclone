@@ -30,7 +30,7 @@ struct gpt_legacy_mbr {
 static ssize_t read_lba(gpt_disk *disk, uint64_t lba,
                         void *buffer, const size_t bytes)
 {
-    off_t offset = lba * disk->sector_size;
+    off_t offset = lba * disk->super.sector_size;
 
     if (lseek(disk->dev_fd, offset, SEEK_SET) == (off_t) -1)
         return -1;
@@ -126,7 +126,7 @@ static gpt_entry *gpt_read_entries(gpt_disk *disk,
     if (!ret)
         return NULL;
     offset = le64_to_cpu(header->partition_entry_lba) *
-            disk->sector_size;
+            disk->super.sector_size;
 
     if (offset != lseek(disk->dev_fd, offset, SEEK_SET))
         goto fail;
@@ -210,14 +210,14 @@ static gpt_header *gpt_read_header(gpt_disk *disk,
 
     /* always allocate all sector, the area after GPT header
      * has to be fill by zeros */
-    assert(disk->sector_size >= sizeof(gpt_header));
+    assert(disk->super.sector_size >= sizeof(gpt_header));
 
-    header = calloc(1, disk->sector_size);
+    header = calloc(1, disk->super.sector_size);
     if (!header)
         return NULL;
 
     /* read and verify header */
-    if (read_lba(disk, lba, header, disk->sector_size) != 0)
+    if (read_lba(disk, lba, header, disk->super.sector_size) != 0)
         goto invalid;
 
     if (!gpt_check_signature(header))
@@ -225,7 +225,7 @@ static gpt_header *gpt_read_header(gpt_disk *disk,
 
     /* make sure header size is between 92 and sector size bytes */
     hsz = le32_to_cpu(header->size);
-    if (hsz < GPT_HEADER_MINSZ || hsz > disk->sector_size)
+    if (hsz < GPT_HEADER_MINSZ || hsz > disk->super.sector_size)
         goto invalid;
 
     if (!gpt_check_header_crc(header, NULL))

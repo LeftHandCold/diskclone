@@ -7,7 +7,8 @@
 void
 hd_free(hd_context *ctx, void *p)
 {
-    ctx->alloc->free(ctx->alloc->user, p);
+    if (p)
+        ctx->alloc->free(ctx->alloc->user, p);
 }
 
 static void *

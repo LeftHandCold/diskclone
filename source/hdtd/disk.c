@@ -138,7 +138,7 @@ hd_drop_dest_disk(hd_context *ctx, hd_disk_dest *disk)
 {
     if (hd_drop_imp(ctx, disk, &disk->refs))
     {
-        SAFE_DISK_CLOSE(disk->dev_fd);
+        SAFE_DEV_CLOSE(disk->dev_fd);
         hd_free(ctx, disk);
     }
 }

@@ -12,7 +12,6 @@ struct gpt_disk_s
     int dev_fd;         /* device descriptor */
 
     unsigned char *first_sector; /* buffer with master boot record */
-    uint32_t sector_size;
 
     /* gpt specific part */
     gpt_header	*pheader;	/* primary header */

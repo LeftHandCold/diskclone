@@ -8,6 +8,7 @@ void main()
 {
     hd_context *ctx;
     hd_disk *disk;
+    hd_part *part;
     ctx = hd_new_context(NULL);
     if (!ctx)
     {
@@ -24,8 +25,7 @@ void main()
         hd_drop_context(ctx);
         return;
     }
-
-    /* Open the disk. */
+    /* Open the part. */
     hd_try(ctx)
         disk = hd_open_disk(ctx, "/Users/sjw/Documents/debugfile/disk/mbr", "/Users/sjw/Documents/debugfile/disk/test");
     hd_catch(ctx) {
@@ -33,6 +33,26 @@ void main()
         hd_drop_context(ctx);
         return ;
     }
+    /* Register the default part types to handle. */
+    hd_try(ctx)
+        hd_register_part_handlers(ctx);
+    hd_catch(ctx)
+    {
+        fprintf(stderr, "cannot register disk handlers: %s\n", hd_caught_message(ctx));
+        hd_drop_context(ctx);
+        return;
+    }
+
+    /* Open the disk. */
+    hd_try(ctx)
+        part = hd_open_part(ctx, disk, "/Users/sjw/Documents/debugfile/disk/ntfs");
+    hd_catch(ctx) {
+        fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
+        hd_drop_context(ctx);
+        return ;
+    }
+
+
 
     printf("main is end\n");
 }

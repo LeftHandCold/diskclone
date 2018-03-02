@@ -13,13 +13,14 @@ extern "C" {
 #include "hdtd/config.h"
 #include "hdtd/system.h"
 #include "hdtd/bitops.h"
+#include "hdtd/biosdisk.h"
 #include "hdtd/context.h"
 
 #include "hdtd/string-util.h"
 #include "hdtd/crc32.h"
 
-#include "hdtd/partition.h"
 #include "hdtd/disk.h"
+#include "hdtd/partition.h"
 
 #ifdef __cplusplus
 }

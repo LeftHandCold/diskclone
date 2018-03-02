@@ -39,3 +39,57 @@ hd_register_part_handler(hd_context *ctx, const hd_part_handler *handler)
 
     pc->handler[pc->count++] = handler;
 }
+
+void *
+hd_new_part_of_size(hd_context *ctx, int size)
+{
+    hd_part *part = hd_calloc(ctx, 1, size);
+    part->refs = 1;
+    return part;
+}
+
+hd_part *
+hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname)
+{
+    int i;
+    hd_part_handler_context *ph;
+
+    if (partname == NULL)
+        hd_throw(ctx, HD_ERROR_GENERIC, "no part to open");
+
+    ph = ctx->part;
+    if (ph->count == 0)
+        hd_throw(ctx, HD_ERROR_GENERIC, "No part handlers registered");
+
+    for (i = 0; i < ph->count; i++)
+    {
+        int rc = 0;
+        hd_part *part;
+        part = ph->handler[i]->open(ctx, disk, partname);
+
+        if (part->probe_part)
+            rc = part->probe_part(ctx, part);
+
+
+        if(rc != 1)
+        {
+            hd_drop_disk(ctx, disk);
+            continue;
+        }
+
+        return part;
+    }
+
+    hd_throw(ctx, HD_ERROR_GENERIC, "Could not find the specified disk handler");
+}
+
+void
+hd_drop_part(hd_context *ctx, hd_part *part)
+{
+    if (hd_drop_imp(ctx, part, &part->refs))
+    {
+        if (part->drop_part)
+            part->drop_part(ctx, part);
+        hd_free(ctx, part);
+    }
+}

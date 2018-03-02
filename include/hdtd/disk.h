@@ -34,6 +34,8 @@ struct hd_disk_s
 {
 	int refs;
 
+	uint32_t sector_size;
+
 	hd_disk_dest *disk_dest;
 	hd_disk_drop_fn *drop_disk;
     hd_disk_probe_fn *probe_disk;
@@ -91,6 +93,6 @@ int hd_open_dev(hd_context *ctx, const char *diskname);
 void hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size);
 
 
-#define SAFE_DISK_CLOSE(x) if(x >= 0) { fclose(x); x = 0; }
+#define SAFE_DEV_CLOSE(x) if(x >= 0) { close(x); x = 0; }
 
 #endif //DISKCLONE_HDTD_DISK_H
