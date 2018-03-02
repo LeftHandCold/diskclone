@@ -9,6 +9,8 @@ hd_open_dev(hd_context *ctx, const char *diskname)
 {
     int dev_fd;
     dev_fd = open(diskname, O_RDWR);
+    if (dev_fd < 0)
+        hd_throw(ctx, HD_ERROR_GENERIC, "failed to open %s, errno %d", diskname, errno);
     return dev_fd;
 }
 void

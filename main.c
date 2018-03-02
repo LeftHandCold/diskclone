@@ -15,7 +15,7 @@ void main()
         return ;
     }
 
-    /* Register the default file types to handle. */
+    /* Register the default disk types to handle. */
     hd_try(ctx)
         hd_register_disk_handlers(ctx);
     hd_catch(ctx)
@@ -27,11 +27,12 @@ void main()
 
     /* Open the disk. */
     hd_try(ctx)
-        disk = hd_open_disk(ctx, "/Users/sjw/Documents/debugfile/disk/mbr");
+        disk = hd_open_disk(ctx, "/Users/sjw/Documents/debugfile/disk/mbr", "/Users/sjw/Documents/debugfile/disk/test");
     hd_catch(ctx) {
-        fprintf(stderr, "cannot open document: %s\n", hd_caught_message(ctx));
+        fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
         return ;
     }
+
     printf("main is end\n");
 }

@@ -13,9 +13,18 @@
 /*
 	Disk interface
 */
-typedef struct hd_disk_label_operations_s hd_disk_label_operations;
+typedef struct hd_disk_dest_s hd_disk_dest;
 typedef struct hd_disk_s hd_disk;
 typedef struct hd_disk_handler_s hd_disk_handler;
+
+struct hd_disk_dest_s
+{
+	int refs;
+
+	const char *name;
+	int dev_fd;
+	uint64_t size;
+};
 
 typedef void (hd_disk_drop_fn)(hd_context *ctx, hd_disk *disk);
 
@@ -25,6 +34,7 @@ struct hd_disk_s
 {
 	int refs;
 
+	hd_disk_dest *disk_dest;
 	hd_disk_drop_fn *drop_disk;
     hd_disk_probe_fn *probe_disk;
 };
@@ -62,9 +72,13 @@ void hd_register_disk_handlers(hd_context *ctx);
  * @param diskname
  * @return hd_disk
  */
-hd_disk *hd_open_disk(hd_context *ctx, const char *diskname);
+hd_disk *hd_open_disk(hd_context *ctx, const char *src, const char *dest);
 
 void hd_drop_disk(hd_context *ctx, hd_disk *disk);
+
+int hd_open_dest_disk(hd_context *ctx, hd_disk *disk, const char *diskname);
+
+void hd_drop_dest_disk(hd_context *ctx, hd_disk_dest *disk);
 
 /**
  * hd_open_dev: Open the device.
@@ -75,5 +89,7 @@ void hd_drop_disk(hd_context *ctx, hd_disk *disk);
 int hd_open_dev(hd_context *ctx, const char *diskname);
 
 void hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size);
+
+void hd_safe_disk_close(int dev_fd);
 
 #endif //DISKCLONE_HDTD_DISK_H
