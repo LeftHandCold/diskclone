@@ -9,39 +9,38 @@
 #include "hdtd/context.h"
 
 /*
-	partition interface
+	part interface
 */
-typedef struct hd_partition_s hd_partition;
-typedef struct hd_partition_handler_s hd_partition_handler;
+typedef struct hd_part_s hd_part;
+typedef struct hd_part_handler_s hd_part_handler;
 
+typedef void (hd_part_drop_fn)(hd_context *ctx, hd_part *part);
+typedef int (hd_part_probe_fn)(hd_context *ctx, hd_part *disk);
 
-typedef void (hd_partition_drop_fn)(hd_context *ctx, hd_partition *doc);
-
-struct hd_partition_s
+struct hd_part_s
 {
 	int refs;
 
-	hd_partition_drop_fn *drop_partition;
+	hd_part_drop_fn *drop_part;
+    hd_part_probe_fn *probe_part;
 };
 
-typedef hd_partition *(hd_partition_open_fn)(hd_context *ctx, const char *partitionname);
+typedef hd_part *(hd_part_open_fn)(hd_context *ctx, const char *partname);
 
-typedef int (hd_partition_recognize_fn)(hd_context *ctx, const char *partitionname);
+typedef int (hd_part_recognize_fn)(hd_context *ctx, const char *partname);
 
-struct hd_partition_handler_s
+struct hd_part_handler_s
 {
-	hd_partition_recognize_fn *recognize;
-	hd_partition_open_fn *open;
+	hd_part_recognize_fn *recognize;
+	hd_part_open_fn *open;
 };
 
+void hd_register_part_handler(hd_context *ctx, const hd_part_handler *handler);
 
-void hd_register_partition_handler(hd_context *ctx, const hd_partition_handler *handler);
+void hd_register_part_handlers(hd_context *ctx);
 
-void hd_register_partition_handlers(hd_context *ctx);
+hd_part *hd_open_part(hd_context *ctx, const char *diskname);
 
-hd_partition *hd_open_partition(hd_context *ctx, const char *diskname);
-
-
-void hd_drop_partition(hd_context *ctx, hd_partition *partition);
+void hd_drop_part(hd_context *ctx, hd_part *part);
 
 #endif //DISKCLONE_HDTD_PARTITION_H

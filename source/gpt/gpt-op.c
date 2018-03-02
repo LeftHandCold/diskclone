@@ -176,7 +176,6 @@ static int gpt_check_lba_sanity(gpt_disk *cxt, gpt_header *header)
 
     /* check if first and last usable LBA make sense */
     if (lu < fu) {
-        //DBG(LABEL, ul_debug("error: header last LBA is before first LBA"));
         goto done;
     }
 
@@ -185,7 +184,6 @@ static int gpt_check_lba_sanity(gpt_disk *cxt, gpt_header *header)
     /* the header has to be outside usable range */
     if (fu < GPT_PRIMARY_PARTITION_TABLE_LBA &&
         GPT_PRIMARY_PARTITION_TABLE_LBA < lu) {
-        //DBG(LABEL, ul_debug("error: header outside of usable range"));
         goto done;
     }
 
@@ -254,14 +252,12 @@ static gpt_header *gpt_read_header(gpt_disk *disk,
     else
         free(ents);
 
-    //DBG(LABEL, ul_debug("found valid GPT Header on LBA %ju", lba));
     return header;
 
 invalid:
     free(header);
     free(ents);
 
-    //DBG(LABEL, ul_debug("read GPT Header on LBA %ju failed", lba));
     return NULL;
 }
 

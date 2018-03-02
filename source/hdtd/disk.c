@@ -19,9 +19,9 @@ struct hd_disk_handler_context_s
 
 void hd_new_disk_handler_context(hd_context *ctx)
 {
-    ctx->src = hd_malloc_struct(ctx, hd_disk_handler_context);
-    ctx->src->refs = 1;
-    ctx->src->count = 0;
+    ctx->disk = hd_malloc_struct(ctx, hd_disk_handler_context);
+    ctx->disk->refs = 1;
+    ctx->disk->count = 0;
 }
 
 void hd_register_disk_handler(hd_context *ctx, const hd_disk_handler *handler)
@@ -32,7 +32,7 @@ void hd_register_disk_handler(hd_context *ctx, const hd_disk_handler *handler)
     if (!handler)
         return;
 
-    dc = ctx->src;
+    dc = ctx->disk;
     if (dc == NULL)
         hd_throw(ctx, HD_ERROR_GENERIC, "Document handler list not found");
 
@@ -75,7 +75,7 @@ hd_open_disk(hd_context *ctx, const char *src, const char *dest)
     if ((src == NULL) || (dest == NULL))
         hd_throw(ctx, HD_ERROR_GENERIC, "no disk to open");
 
-    dh = ctx->src;
+    dh = ctx->disk;
     if (dh->count == 0)
         hd_throw(ctx, HD_ERROR_GENERIC, "No disk handlers registered");
 
@@ -149,9 +149,9 @@ hd_drop_disk_handler_context(hd_context *ctx)
     if (!ctx)
         return;
 
-    if (hd_drop_imp(ctx, ctx->src, &ctx->src->refs))
+    if (hd_drop_imp(ctx, ctx->disk, &ctx->disk->refs))
     {
-        hd_free(ctx, ctx->src);
-        ctx->src = NULL;
+        hd_free(ctx, ctx->disk);
+        ctx->disk = NULL;
     }
 }

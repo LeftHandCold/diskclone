@@ -19,3 +19,12 @@ void hd_register_disk_handlers(hd_context *ctx)
     hd_register_disk_handler(ctx, &dos_disk_handler);
 #endif /* HD_ENABLE_DOS */
 }
+
+extern hd_part_handler ntfs_part_handler;
+
+void hd_register_part_handlers(hd_context *ctx)
+{
+#if HD_ENABLE_NTFS
+    hd_register_part_handler(ctx, &ntfs_part_handler);
+#endif /* HD_ENABLE_NTFS */
+}
