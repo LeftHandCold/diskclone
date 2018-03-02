@@ -27,7 +27,7 @@ void main()
 
     /* Open the disk. */
     hd_try(ctx)
-        disk = hd_open_disk(ctx, "/dev/sdb");
+        disk = hd_open_disk(ctx, "/Users/sjw/Documents/debugfile/disk/mbr");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open document: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
