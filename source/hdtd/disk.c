@@ -138,7 +138,7 @@ hd_drop_dest_disk(hd_context *ctx, hd_disk_dest *disk)
 {
     if (hd_drop_imp(ctx, disk, &disk->refs))
     {
-        hd_safe_disk_close(disk->dev_fd);
+        SAFE_DISK_CLOSE(disk->dev_fd);
         hd_free(ctx, disk);
     }
 }
@@ -154,11 +154,4 @@ hd_drop_disk_handler_context(hd_context *ctx)
         hd_free(ctx, ctx->src);
         ctx->src = NULL;
     }
-}
-
-void
-hd_safe_disk_close(int dev_fd)
-{
-    if (dev_fd >= 0)
-        close(dev_fd);
 }

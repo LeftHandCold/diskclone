@@ -20,6 +20,7 @@ typedef void (hd_partition_drop_fn)(hd_context *ctx, hd_partition *doc);
 struct hd_partition_s
 {
 	int refs;
+
 	hd_partition_drop_fn *drop_partition;
 };
 

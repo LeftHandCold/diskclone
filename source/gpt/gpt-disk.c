@@ -32,7 +32,7 @@ gpt_drop_disk_imp(hd_context *ctx, gpt_disk *disk)
         disk->ents = NULL;
         disk->pheader = NULL;
 
-        hd_safe_disk_close(disk->dev_fd);
+        SAFE_DISK_CLOSE(disk->dev_fd);
     }
     hd_catch(ctx)
         hd_rethrow(ctx);

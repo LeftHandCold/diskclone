@@ -25,7 +25,7 @@ dos_drop_disk_imp(hd_context *ctx, dos_disk *disk)
         if (disk->first_sector != NULL)
             hd_free(ctx, disk->first_sector);
 
-        hd_safe_disk_close(disk->dev_fd);
+        SAFE_DISK_CLOSE(disk->dev_fd);
     }
     hd_catch(ctx)
         hd_rethrow(ctx);

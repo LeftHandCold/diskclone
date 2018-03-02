@@ -90,6 +90,7 @@ int hd_open_dev(hd_context *ctx, const char *diskname);
 
 void hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size);
 
-void hd_safe_disk_close(int dev_fd);
+
+#define SAFE_DISK_CLOSE(x) if(x >= 0) { fclose(x); x = 0; }
 
 #endif //DISKCLONE_HDTD_DISK_H
