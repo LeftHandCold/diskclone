@@ -36,7 +36,7 @@ ntfs_new_part(hd_context *ctx, int dev_fd)
 }
 
 ntfs_part *
-ntfs_open_part (hd_context *ctx, const char *partname, hd_disk *disk)
+ntfs_open_part (hd_context *ctx, hd_disk *disk, const char *partname)
 {
     ntfs_part *part = NULL;
 

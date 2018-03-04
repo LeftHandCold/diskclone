@@ -18,6 +18,14 @@ struct hd_part_handler_context_s
 };
 
 void
+hd_new_part_handler_context(hd_context *ctx)
+{
+	ctx->part = hd_malloc_struct(ctx, hd_part_handler_context);
+	ctx->part->refs = 1;
+	ctx->part->count = 0;
+}
+
+void
 hd_register_part_handler(hd_context *ctx, const hd_part_handler *handler)
 {
     hd_part_handler_context *pc;
@@ -80,7 +88,7 @@ hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname)
         return part;
     }
 
-    hd_throw(ctx, HD_ERROR_GENERIC, "Could not find the specified disk handler");
+    hd_throw(ctx, HD_ERROR_GENERIC, "Could not find the specified part handler");
 }
 
 void
@@ -92,4 +100,17 @@ hd_drop_part(hd_context *ctx, hd_part *part)
             part->drop_part(ctx, part);
         hd_free(ctx, part);
     }
+}
+
+void
+hd_drop_part_handler_context(hd_context *ctx)
+{
+	if (!ctx)
+		return;
+
+	if (hd_drop_imp(ctx, ctx->part, &ctx->part->refs))
+	{
+		hd_free(ctx, ctx->part);
+		ctx->part = NULL;
+	}
 }

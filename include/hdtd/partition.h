@@ -23,7 +23,7 @@ struct hd_part_s
 
     uint8_t type;
     uint32_t scan_buffer_size;
-    char *scan_buffer;
+    unsigned char *scan_buffer;
     uint64_t total_sector;
     uint32_t secperclr;
 

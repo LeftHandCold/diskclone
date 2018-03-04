@@ -38,7 +38,7 @@ void main()
         hd_register_part_handlers(ctx);
     hd_catch(ctx)
     {
-        fprintf(stderr, "cannot register disk handlers: %s\n", hd_caught_message(ctx));
+        fprintf(stderr, "cannot register part handlers: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
         return;
     }
@@ -47,7 +47,7 @@ void main()
     hd_try(ctx)
         part = hd_open_part(ctx, disk, "/Users/sjw/Documents/debugfile/disk/ntfs");
     hd_catch(ctx) {
-        fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
+        fprintf(stderr, "cannot open part: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
         return ;
     }
