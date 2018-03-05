@@ -7,15 +7,14 @@
 
 int ntfs_probe_label(hd_context *ctx, ntfs_part *part)
 {
-    NTFS_BPB *pntfs = (NTFS_BPB *)part->super.scan_buffer;
+    ntfs_bpb *pntfs = (ntfs_bpb *)part->super.scan_buffer;
 
     if (memcmp((char*)pntfs->OemID, "NTFS", 4) == 0)
     {
-        part->super.total_sector = (uint64_t)pntfs->TotalSectors;
+        part->super.total_sector = pntfs->TotalSectors;
         part->super.secperclr = pntfs->SecPerClr;
         part->super.type = NTFS;
         return 1;
     }
-
     return 0;
 }
