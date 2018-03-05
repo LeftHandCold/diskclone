@@ -16,6 +16,7 @@ typedef struct hd_part_handler_s hd_part_handler;
 
 typedef void (hd_part_drop_fn)(hd_context *ctx, hd_part *part);
 typedef int (hd_part_probe_fn)(hd_context *ctx, hd_part *disk);
+typedef void (hd_part_clone_fn)(hd_context *ctx, hd_disk *disk, hd_part *part);
 
 struct hd_part_s
 {
@@ -29,6 +30,8 @@ struct hd_part_s
 
 	hd_part_drop_fn *drop_part;
     hd_part_probe_fn *probe_part;
+	hd_part_clone_fn *clone_part;
+
 };
 
 typedef hd_part *(hd_part_open_fn)(hd_context *ctx, hd_disk *disk, const char *partname);
@@ -53,6 +56,7 @@ void hd_register_part_handler(hd_context *ctx, const hd_part_handler *handler);
 void hd_register_part_handlers(hd_context *ctx);
 
 hd_part *hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname);
+void hd_clone_part(hd_context *ctx, hd_disk *disk, hd_part *part);
 
 void hd_drop_part(hd_context *ctx, hd_part *part);
 

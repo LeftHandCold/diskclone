@@ -92,6 +92,15 @@ hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname)
 }
 
 void
+hd_clone_part(hd_context *ctx, hd_disk *disk, hd_part *part)
+{
+    if (part->clone_part)
+        part->clone_part(ctx, disk, part);
+    else
+        hd_throw(ctx, HD_ERROR_GENERIC, "Could not find the specified clone_part");
+}
+
+void
 hd_drop_part(hd_context *ctx, hd_part *part)
 {
     if (hd_drop_imp(ctx, part, &part->refs))

@@ -11,6 +11,7 @@ ntfs_drop_part_imp(hd_context *ctx, ntfs_part *part)
     {
         SAFE_DEV_CLOSE(part->dev_fd);
 
+        hd_free(ctx, part->bitmap);
         hd_free(ctx, part->super.scan_buffer);
     }
     hd_catch(ctx)
@@ -25,6 +26,7 @@ ntfs_new_part(hd_context *ctx, int dev_fd)
     ntfs_part *part = hd_new_derived_disk(ctx, ntfs_part);
     part->super.drop_part = (hd_part_drop_fn *)ntfs_drop_part_imp;
     part->super.probe_part = (hd_part_probe_fn *)ntfs_probe_label;
+    part->super.clone_part = (hd_part_clone_fn *)ntfs_part_clone;
 
     part->super.scan_buffer_size = SCAN_BUFFER_SIZE;
     part->super.scan_buffer = hd_malloc(ctx, part->super.scan_buffer_size);
@@ -48,6 +50,7 @@ ntfs_open_part (hd_context *ctx, hd_disk *disk, const char *partname)
         dev_fd = hd_open_dev(ctx, partname);
         part = ntfs_new_part(ctx, dev_fd);
         hd_read_write_device(ctx, part->dev_fd, false, part->super.scan_buffer, 0, 8 * disk->sector_size);
+
     }
     hd_catch(ctx)
     {

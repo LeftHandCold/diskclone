@@ -27,7 +27,7 @@ void main()
     }
     /* Open the part. */
     hd_try(ctx)
-        disk = hd_open_disk(ctx, "/Users/sjw/Documents/debugfile/disk/mbr", "/Users/sjw/Documents/debugfile/disk/test");
+        disk = hd_open_disk(ctx, "F:/disk/mbr", "F:/disk/test");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
@@ -46,12 +46,24 @@ void main()
 
     /* Open the disk. */
     hd_try(ctx)
-        part = hd_open_part(ctx, disk, "/Users/sjw/Documents/debugfile/disk/ntfs");
+        part = hd_open_part(ctx, disk, "F:/disk/ntfs");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open part: %s\n", hd_caught_message(ctx));
         hd_drop_disk(ctx, disk);
         hd_drop_context(ctx);
         return ;
+    }
+
+    hd_try(ctx)
+    {
+        hd_clone_part(ctx, disk, part);
+    }
+    hd_catch(ctx)
+    {
+        fprintf(stderr, "cannot clone part: %s\n", hd_caught_message(ctx));
+        hd_drop_part(ctx, part);
+        hd_drop_disk(ctx, disk);
+        hd_drop_context(ctx);
     }
 
 	hd_drop_part(ctx, part);
