@@ -8,7 +8,11 @@ int
 hd_open_dev(hd_context *ctx, const char *diskname)
 {
     int dev_fd;
+#if defined(__CYGWIN__) || defined(__MINGW32__)
+    dev_fd = open(diskname, O_RDWR | O_BINARY);
+#else
     dev_fd = open(diskname, O_RDWR | O_CLOEXEC);
+#endif
     if (dev_fd < 0)
         hd_throw(ctx, HD_ERROR_GENERIC, "failed to open %s, errno %d", diskname, errno);
     return dev_fd;
