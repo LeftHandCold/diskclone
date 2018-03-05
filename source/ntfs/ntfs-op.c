@@ -28,6 +28,7 @@ ntfs_probe_label(hd_context *ctx, ntfs_part *part)
         part->super.total_sector = pntfs->TotalSectors;
         part->super.secperclr = pntfs->SecPerClr;
         part->super.type = NTFS;
+        part->pntfs = pntfs;
         return 1;
     }
     return 0;
@@ -37,4 +38,6 @@ void
 ntfs_part_clone(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 {
     ntfs_init_bitmap(ctx, part);
+
+    ntfs_scan_init(ctx, disk, part);
 }

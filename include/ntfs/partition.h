@@ -47,6 +47,8 @@ struct ntfs_part_s
     int dev_fd;         /* device descriptor */
     uint32_t bitmap_size;
     unsigned char *bitmap;
+
+    ntfs_bpb *pntfs;
 };
 
 

@@ -8,5 +8,6 @@
 #include "hdtd.h"
 
 #include "ntfs/partition.h"
+#include "ntfs/scan.h"
 
 #endif //DISKCLONE_NTFS_H
