@@ -17,9 +17,24 @@ typedef struct mft_attr_s mft_attr;
 
 typedef struct ntfs_scan_s ntfs_scan;
 
+#define LOB( a )		( (uint8_t)(a) & 0xF )
+#define HIB( a )		( ( (uint8_t)(a) & 0xF0 ) >> 4 )
+
+#define MAX_RUNS 0x200
+
+#define		BITMAP_RECORD       0x06
+
+#define		$DATA				0x80
+#define		$NAME				0x30
+#define		$ATTR_LIST			0x20
+#define		$INDEX_ALLOC		0xA0
+#define		$INDEX_ROOT			0x90
+#define		$BITMAP				0xb0
+
 struct ntfs_scan_s
 {
     uint16_t mft_size;
+    unsigned char* mft_record;
 };
 
 #pragma pack(1)
@@ -86,5 +101,7 @@ struct mft_attr_s
 #pragma pack()
 
 void ntfs_scan_init(hd_context *ctx, hd_disk *disk, ntfs_part *part);
+
+
 
 #endif //DISKCLONE_NTFS_SCAN_H

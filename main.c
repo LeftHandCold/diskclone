@@ -64,6 +64,7 @@ void main()
         hd_drop_part(ctx, part);
         hd_drop_disk(ctx, disk);
         hd_drop_context(ctx);
+        return;
     }
 
 	hd_drop_part(ctx, part);

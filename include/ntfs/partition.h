@@ -48,6 +48,18 @@ struct ntfs_part_s
     uint32_t bitmap_size;
     unsigned char *bitmap;
 
+    /*
+     * The specific position of the bitmap
+     * fragment in the volume
+     *
+     * bitmap_position[0] is start cluster;
+     * bitmap_position[1] is the bitmap_position[0] cluster size;
+     * bitmap_position[2] is start cluster;
+     * bitmap_position[3] is the bitmap_position[2] cluster size;
+     * .....
+     * */
+    uint32_t bitmap_position[512];
+
     ntfs_bpb *pntfs;
 };
 
