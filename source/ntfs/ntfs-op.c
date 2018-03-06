@@ -10,12 +10,12 @@ ntfs_init_bitmap(hd_context *ctx, ntfs_part *part)
 {
     uint64_t total_block;
     total_block = (part->super.total_sector + COPY_BLOCK_SIZE - 1) / COPY_BLOCK_SIZE;
-    part->bitmap_size = (uint32_t)(((total_block + 7)/8 + 0xfff) & ~0xfff);
+    part->super.bitmap_size = (uint32_t)(((total_block + 7)/8 + 0xfff) & ~0xfff);
 
-    part->bitmap = hd_malloc(ctx, part->bitmap_size);
-    if (!part->bitmap)
-        hd_throw(ctx, HD_ERROR_GENERIC, "failed to malloc bitmap, size %d errno %d", part->bitmap_size, errno);
-    memset(part->bitmap, 0, part->bitmap_size);
+    part->super.bitmap = hd_malloc(ctx, part->super.bitmap_size);
+    if (!part->super.bitmap)
+        hd_throw(ctx, HD_ERROR_GENERIC, "failed to malloc bitmap, size %d errno %d", part->super.bitmap_size, errno);
+    memset(part->super.bitmap, 0, part->super.bitmap_size);
 }
 
 int

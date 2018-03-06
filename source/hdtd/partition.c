@@ -123,3 +123,44 @@ hd_drop_part_handler_context(hd_context *ctx)
 		ctx->part = NULL;
 	}
 }
+
+static bool
+MarkBit(uint64_t block,unsigned char *bitmap)
+{
+    uint64_t byte = (block >> 3);//block/8;
+    uint8_t mask = (1 << ((uint8_t)block&7));//block%8
+    //check capacity of bitmap?
+    bitmap[byte] |= mask;
+    return true;
+}
+
+static bool
+ReadBit(unsigned char *bitmap, uint64_t block)
+{
+    uint64_t byte = (block >> 3);	//block/8;
+    uint8_t mask = (1 << ((uint8_t)block&7));//block%8
+
+    if (mask & bitmap[byte])
+        return true;
+    else
+        return false;
+}
+
+void
+hd_set_data_bitmap(hd_context *ctx, hd_part *part, uint64_t sector, uint64_t num)
+{
+    uint64_t firstblk;
+    uint64_t lastblk;
+
+    firstblk = sector / COPY_BLOCK_SIZE;
+    lastblk = (sector + num - 1) / COPY_BLOCK_SIZE;
+
+    while (firstblk<=lastblk)
+    {
+        if (!ReadBit(part->bitmap,firstblk))
+        {
+            MarkBit(firstblk, part->bitmap);
+        }
+        firstblk++;
+    }
+}

@@ -7,8 +7,6 @@
 
 typedef struct ntfs_part_s ntfs_part;
 
-#define COPY_BLOCK_SIZE 64 //64 sectors as a basic block
-#define SCAN_BUFFER_SIZE 0x10000
 typedef struct ntfs_bpb_s ntfs_bpb;
 
 #pragma pack(1)
@@ -45,8 +43,6 @@ struct ntfs_part_s
     hd_part super;
 
     int dev_fd;         /* device descriptor */
-    uint32_t bitmap_size;
-    unsigned char *bitmap;
 
     /*
      * The specific position of the bitmap

@@ -10,8 +10,7 @@ ntfs_drop_part_imp(hd_context *ctx, ntfs_part *part)
     hd_try(ctx)
     {
         SAFE_DEV_CLOSE(part->dev_fd);
-
-        hd_free(ctx, part->bitmap);
+        hd_free(ctx, part->super.bitmap);
         hd_free(ctx, part->super.scan_buffer);
     }
     hd_catch(ctx)

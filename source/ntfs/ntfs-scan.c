@@ -221,6 +221,51 @@ ntfs_parse_bitmap_record(hd_context *ctx, hd_disk *disk, ntfs_part *part, ntfs_s
     }
 }
 
+static int
+ntfs_get_cluster_val(hd_context *ctx, hd_disk *disk, ntfs_part *part, ntfs_scan *scan, uint32_t number)
+{
+    /*The current cluster is in a number of sectors*/
+    uint32_t pos_sector = number / 4096;
+    /*The current cluster is in a number of byte*/
+    uint32_t pos_byte = (number % 4096) / 8;
+    /*The current cluster is in a number of bit*/
+    uint32_t pos_bit = (number % 4096) % 8;
+
+    if (pos_sector != scan->pos_buf_sector_num)
+    {
+        uint32_t bitmap_sec_num,relative;
+        uint32_t i;
+        bitmap_sec_num = part->bitmap_position[1];
+        i = 1;
+        relative = pos_sector;
+
+        while (relative + 1 > bitmap_sec_num)
+        {
+            relative -= part->bitmap_position[i];
+            i += 2;
+            bitmap_sec_num = part->bitmap_position[i];
+
+            if (!part->bitmap_position[i])
+                hd_throw(ctx, HD_ERROR_GENERIC, "cannot find bitmap LCN");
+        }
+
+        uint64_t start = relative +  part->bitmap_position[i - 1] * part->super.secperclr * disk->sector_size;
+        hd_read_write_device(ctx, part->dev_fd, false, scan->sector_buf,
+                             start,
+                             disk->sector_size);
+
+        scan->pos_buf_sector_num = pos_sector;
+
+    }
+
+    uint8_t b, val;
+    b = scan->sector_buf[pos_byte];
+    val = b >> pos_bit;
+    return val&1;
+
+
+}
+
 void
 ntfs_scan_init(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 {
@@ -231,11 +276,41 @@ ntfs_scan_init(hd_context *ctx, hd_disk *disk, ntfs_part *part)
     {
         scan = hd_malloc(ctx, sizeof(ntfs_scan));
         ntfs_parse_bitmap_record(ctx, disk, part, scan);
+
+        /*Mark the part's bitmap by the bitmap of the NTFS*/
+        scan->sector_buf = hd_malloc(ctx, disk->sector_size);
+        scan->pos_buf_sector_num = 0xFFFFFFFF;
+        uint32_t cluster_num;
+        /*Clusters that are currently to be marked*/
+        uint32_t i;
+        cluster_num = (uint32_t) part->super.total_sector / part->super.secperclr;
+        for (i = 0; i < cluster_num; i++)
+        {
+            if (!ntfs_get_cluster_val(ctx, disk, part, scan, i) ||
+                    i * part->super.secperclr >= part->super.total_sector)
+                continue;
+
+            if (i * part->super.secperclr + COPY_BLOCK_SIZE > part->super.total_sector)
+            {
+                hd_set_data_bitmap(ctx, &part->super, i * part->super.secperclr,
+                                   part->super.total_sector - i * part->super.secperclr);
+                i += part->super.total_sector - i * part->super.secperclr;
+                continue;
+            }
+
+            hd_set_data_bitmap(ctx, &part->super, i * part->super.secperclr, COPY_BLOCK_SIZE);
+            i += 8;
+        }
+
     }
     hd_always(ctx)
     {
+        hd_free(ctx, scan->sector_buf);
+        scan->sector_buf = NULL;
         hd_free(ctx, scan->mft_record);
+        scan->mft_record = NULL;
         hd_free(ctx, scan);
+        scan = NULL;
     }
     hd_catch(ctx)
     {

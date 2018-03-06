@@ -35,6 +35,11 @@ struct ntfs_scan_s
 {
     uint16_t mft_size;
     unsigned char* mft_record;
+
+    /*Buffering for reading BITMAP tables*/
+    unsigned char* sector_buf;
+    /*The sector currently in the buffer*/
+    uint32_t pos_buf_sector_num;
 };
 
 #pragma pack(1)

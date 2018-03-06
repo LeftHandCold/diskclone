@@ -8,6 +8,10 @@
 #include "hdtd/system.h"
 #include "hdtd/context.h"
 
+
+#define COPY_BLOCK_SIZE 64 //64 sectors as a basic block
+#define SCAN_BUFFER_SIZE 0x10000
+
 /*
 	part interface
 */
@@ -27,6 +31,9 @@ struct hd_part_s
     unsigned char *scan_buffer;
     uint64_t total_sector;
     uint32_t secperclr;
+
+	uint32_t bitmap_size;
+	unsigned char *bitmap;
 
 	hd_part_drop_fn *drop_part;
     hd_part_probe_fn *probe_part;
@@ -59,5 +66,14 @@ hd_part *hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname);
 void hd_clone_part(hd_context *ctx, hd_disk *disk, hd_part *part);
 
 void hd_drop_part(hd_context *ctx, hd_part *part);
+
+/**
+ * Set the partition data bitmap bit,
+ * each for 64 sectors
+ * @param ctx
+ * @param sector
+ * @param num
+ */
+void hd_set_data_bitmap(hd_context *ctx, hd_part *part, uint64_t sector, uint64_t num);
 
 #endif //DISKCLONE_HDTD_PARTITION_H
