@@ -16,6 +16,7 @@ typedef struct hd_error_stack_slot_s hd_error_stack_slot;
 typedef struct hd_warn_context_s hd_warn_context;
 typedef struct hd_disk_handler_context_s hd_disk_handler_context;
 typedef struct hd_part_handler_context_s hd_part_handler_context;
+typedef struct hd_pthread_context_s hd_pthread_context;
 typedef struct hd_context_s hd_context;
 
 struct hd_alloc_context_s
@@ -167,6 +168,7 @@ struct hd_context_s
     hd_warn_context *warn;
     hd_disk_handler_context *disk;
 	hd_part_handler_context *part;
+	hd_pthread_context *pthread;
 };
 
 /*

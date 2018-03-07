@@ -22,6 +22,8 @@ extern "C" {
 #include "hdtd/disk.h"
 #include "hdtd/partition.h"
 
+#include "hdtd/pthread.h"
+
 #ifdef __cplusplus
 }
 #endif

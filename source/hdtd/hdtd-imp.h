@@ -13,6 +13,9 @@ void hd_drop_disk_handler_context(hd_context *ctx);
 void hd_new_part_handler_context(hd_context *ctx);
 void hd_drop_part_handler_context(hd_context *ctx);
 
+void hd_new_pthread_context(hd_context *ctx);
+void hd_drop_pthread_context(hd_context *ctx);
+
 static inline void *
 hd_keep_imp(hd_context *ctx, void *p, int *refs)
 {
