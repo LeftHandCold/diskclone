@@ -12,6 +12,8 @@
 
 #include <pthread.h>
 
+typedef struct hd_pthread_s hd_pthread;
+
 struct hd_pthread_context_s
 {
     int refs;
@@ -22,6 +24,15 @@ struct hd_pthread_context_s
     pthread_mutex_t mutex;
     int consumer_thread_num;
     int producer_thread_num;
+};
+
+struct hd_pthread_s
+{
+    pthread_t		threadid;
+    int				index;
+    unsigned int	active : 1;
+    uint64_t		beginblock;
+    uint64_t		endblock;
 };
 
 void hd_pthread_init(hd_context *ctx, hd_part *part);

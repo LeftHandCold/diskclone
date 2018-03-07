@@ -5,6 +5,18 @@
 #include "hdtd.h"
 #include "hdtd-imp.h"
 
+static void *
+producer_thread(void * arg)
+{
+
+}
+
+static void *
+consumer_thread(void * arg)
+{
+
+}
+
 void
 hd_new_pthread_context(hd_context *ctx)
 {
