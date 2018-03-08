@@ -16,6 +16,7 @@
 typedef struct hd_disk_dest_s hd_disk_dest;
 typedef struct hd_disk_s hd_disk;
 typedef struct hd_disk_handler_s hd_disk_handler;
+typedef struct hd_part_s hd_part;
 
 struct hd_disk_dest_s
 {
@@ -29,6 +30,7 @@ struct hd_disk_dest_s
 typedef void (hd_disk_drop_fn)(hd_context *ctx, hd_disk *disk);
 
 typedef int (hd_disk_probe_fn)(hd_context *ctx, hd_disk *disk);
+typedef int (hd_write_block_fn) (hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf, uint64_t block, uint32_t number);
 
 struct hd_disk_s
 {
@@ -39,7 +41,11 @@ struct hd_disk_s
 	hd_disk_dest *disk_dest;
 	hd_disk_drop_fn *drop_disk;
     hd_disk_probe_fn *probe_disk;
+	hd_write_block_fn *write_block;
+
 };
+
+
 
 typedef hd_disk *(hd_disk_open_fn)(hd_context *ctx, const char *diskname);
 
@@ -91,6 +97,8 @@ void hd_drop_dest_disk(hd_context *ctx, hd_disk_dest *disk);
 int hd_open_dev(hd_context *ctx, const char *diskname);
 
 void hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, uint64_t start, size_t size);
+
+int hd_write_block(hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf, uint64_t block, uint32_t number);
 
 
 #define SAFE_DEV_CLOSE(x) if(x >= 0) { close(x); x = 0; }

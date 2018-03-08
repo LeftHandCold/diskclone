@@ -13,6 +13,7 @@ hd_drop_context(hd_context *ctx)
     /* Other finalisation calls go here (in reverse order) */
     hd_drop_disk_handler_context(ctx);
     hd_drop_part_handler_context(ctx);
+    hd_drop_pthread_context(ctx);
 
     if (ctx->warn)
     {
@@ -91,6 +92,7 @@ hd_new_context_imp(const hd_alloc_context *alloc, const char *version)
     {
         hd_new_disk_handler_context(ctx);
         hd_new_part_handler_context(ctx);
+        hd_new_pthread_context(ctx);
     }
     hd_catch(ctx)
     {

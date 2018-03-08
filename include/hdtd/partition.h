@@ -15,7 +15,6 @@
 /*
 	part interface
 */
-typedef struct hd_part_s hd_part;
 typedef struct hd_part_handler_s hd_part_handler;
 
 typedef void (hd_part_drop_fn)(hd_context *ctx, hd_part *part);
@@ -26,11 +25,13 @@ struct hd_part_s
 {
 	int refs;
 
+	int dev_fd;
     uint8_t type;
     uint32_t scan_buffer_size;
     unsigned char *scan_buffer;
     uint64_t total_sector;
     uint32_t secperclr;
+	uint64_t beginsector;
 
 	uint32_t bitmap_size;
 	unsigned char *bitmap;
@@ -75,5 +76,7 @@ void hd_drop_part(hd_context *ctx, hd_part *part);
  * @param num
  */
 void hd_set_data_bitmap(hd_context *ctx, hd_part *part, uint64_t sector, uint64_t num);
+
+bool hd_read_bit(unsigned char *bitmap, uint64_t block);
 
 #endif //DISKCLONE_HDTD_PARTITION_H

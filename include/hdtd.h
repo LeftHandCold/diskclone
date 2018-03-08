@@ -15,6 +15,7 @@ extern "C" {
 #include "hdtd/bitops.h"
 #include "hdtd/biosdisk.h"
 #include "hdtd/context.h"
+#include "hdtd/list.h"
 
 #include "hdtd/string-util.h"
 #include "hdtd/crc32.h"

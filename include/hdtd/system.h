@@ -46,6 +46,27 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h> /* needed for int64_t */
 #endif
 
+/*
+ * The usleep function was marked obsolete in POSIX.1-2001 and was removed
+ * in POSIX.1-2008.  It was replaced with nanosleep() that provides more
+ * advantages (like no interaction with signals and other timer functions).
+ */
+#include <time.h>
+#include "unistd.h"
+static inline int xusleep(useconds_t usec)
+{
+#ifdef HAVE_NANOSLEEP
+	struct timespec waittime = {
+		.tv_sec   =  usec / 1000000L,
+		.tv_nsec  = (usec % 1000000L) * 1000
+	};
+	return nanosleep(&waittime, NULL);
+#elif defined(HAVE_USLEEP)
+	return usleep(usec);
+#else
+#endif
+}
+
 #include <sys/stat.h>
 /*
 	Some differences in libc can be smoothed over

@@ -161,7 +161,7 @@ ntfs_parse_bitmap_record(hd_context *ctx, hd_disk *disk, ntfs_part *part, ntfs_s
 
     /* get $MFT head */
     addr = part->pntfs->MftStartLcn * part->pntfs->SecPerClr;
-    hd_read_write_device(ctx, part->dev_fd, false, buf, addr * disk->sector_size, disk->sector_size);
+    hd_read_write_device(ctx, part->super.dev_fd, false, buf, addr * disk->sector_size, disk->sector_size);
     memcpy(&mft, buf, sizeof(mft_head));
 
     /*The size of each MFT is exactly the 2 sector*/
@@ -173,7 +173,7 @@ ntfs_parse_bitmap_record(hd_context *ctx, hd_disk *disk, ntfs_part *part, ntfs_s
     /*get $BITMAP record*/
     scan->mft_record = (unsigned char *)hd_malloc(ctx, scan->mft_size);
     memset(scan->mft_record , 0, scan->mft_size);
-    hd_read_write_device(ctx, part->dev_fd, false, scan->mft_record,
+    hd_read_write_device(ctx, part->super.dev_fd, false, scan->mft_record,
                          addr *  disk->sector_size + BITMAP_RECORD * scan->mft_size, scan->mft_size);
 
     /*get file runs*/
@@ -250,7 +250,7 @@ ntfs_get_cluster_val(hd_context *ctx, hd_disk *disk, ntfs_part *part, ntfs_scan 
         }
 
         uint64_t start = relative +  part->bitmap_position[i - 1] * part->super.secperclr * disk->sector_size;
-        hd_read_write_device(ctx, part->dev_fd, false, scan->sector_buf,
+        hd_read_write_device(ctx, part->super.dev_fd, false, scan->sector_buf,
                              start,
                              disk->sector_size);
 

@@ -40,4 +40,12 @@ ntfs_part_clone(hd_context *ctx, hd_disk *disk, ntfs_part *part)
     ntfs_init_bitmap(ctx, part);
 
     ntfs_scan_init(ctx, disk, part);
+
+    hd_pthread_init(ctx, disk, &part->super);
+
+    hd_producer_create(ctx, disk, &part->super);
+    hd_consumer_create(ctx, disk, &part->super);
+
+    hd_while_pthread(ctx);
+    hd_pthread_deinit(ctx);
 }

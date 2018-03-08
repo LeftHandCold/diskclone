@@ -155,3 +155,47 @@ hd_drop_disk_handler_context(hd_context *ctx)
         ctx->disk = NULL;
     }
 }
+
+int
+hd_write_block(hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf, uint64_t block, uint32_t number)
+{
+    /*LVM need set write_block*/
+    if (disk->write_block)
+        disk->write_block(ctx, disk, part, buf, block, number);
+    else
+    {
+        uint32_t count;
+        uint64_t sector;
+        block *= COPY_BLOCK_SIZE;
+        number *= COPY_BLOCK_SIZE;
+
+        while (number)
+        {
+            count = number;
+            if (count > COPY_IO_UNIT_SIZE)
+                count = COPY_IO_UNIT_SIZE;
+
+            /*FIXME:beginsector set 0 when debug*/
+            ////////////////////////////////////
+            part->beginsector = 0;/////////////
+            //////////////////////////////////
+
+            sector = block + part->beginsector;
+
+            hd_try(ctx)
+            {
+                hd_read_write_device(ctx, disk->disk_dest->dev_fd, true, buf,
+                                     sector * disk->sector_size, count * disk->sector_size);
+            }
+            hd_catch(ctx)
+            {
+                hd_warn(ctx, "hd_write_block hd_read_write_device is failed!");
+                return -1;
+            }
+
+            block += count;
+            number -= count;
+            buf += count * disk->sector_size;
+        }
+    }
+}

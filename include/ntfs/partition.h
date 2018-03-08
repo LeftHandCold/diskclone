@@ -42,8 +42,6 @@ struct ntfs_part_s
 {
     hd_part super;
 
-    int dev_fd;         /* device descriptor */
-
     /*
      * The specific position of the bitmap
      * fragment in the volume

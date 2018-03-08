@@ -125,7 +125,7 @@ hd_drop_part_handler_context(hd_context *ctx)
 }
 
 static bool
-MarkBit(uint64_t block,unsigned char *bitmap)
+mark_bit(uint64_t block,unsigned char *bitmap)
 {
     uint64_t byte = (block >> 3);//block/8;
     uint8_t mask = (1 << ((uint8_t)block&7));//block%8
@@ -134,8 +134,8 @@ MarkBit(uint64_t block,unsigned char *bitmap)
     return true;
 }
 
-static bool
-ReadBit(unsigned char *bitmap, uint64_t block)
+bool
+hd_read_bit(unsigned char *bitmap, uint64_t block)
 {
     uint64_t byte = (block >> 3);	//block/8;
     uint8_t mask = (1 << ((uint8_t)block&7));//block%8
@@ -157,9 +157,9 @@ hd_set_data_bitmap(hd_context *ctx, hd_part *part, uint64_t sector, uint64_t num
 
     while (firstblk<=lastblk)
     {
-        if (!ReadBit(part->bitmap,firstblk))
+        if (!hd_read_bit(part->bitmap,firstblk))
         {
-            MarkBit(firstblk, part->bitmap);
+            mark_bit(firstblk, part->bitmap);
         }
         firstblk++;
     }
