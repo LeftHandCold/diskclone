@@ -187,7 +187,7 @@ producer_thread(void * arg)
                 buf->block_num++;
                 current_block++;
 
-                if ((buf->block_num * COPY_BLOCK_SIZE * disk->sector_size) >= buf->cache_size)
+                if ((buf->block_num * COPY_BLOCK_SIZE) >= buf->cache_size)
                 {
                     set_cache(ctx, buf, CACHE_FLAG_AVAIL);
                     break;

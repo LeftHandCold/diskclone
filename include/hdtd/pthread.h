@@ -17,7 +17,7 @@ typedef struct hd_copy_cache_s hd_copy_cache;
 
 #define CACHE_FLAG_FREE			0
 #define CACHE_FLAG_AVAIL		1	//There are data cache
-#define COPY_CACHE_SIZE			32 * 1024 * 1024
+#define COPY_CACHE_SIZE			32 * 1024 * 2
 #define COPY_IO_UNIT_SIZE		128	//How many sectors are copied (read and written) each time
 #define MAX_PRODUCER_CONSUMER	16
 
