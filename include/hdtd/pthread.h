@@ -30,8 +30,8 @@ struct hd_copy_cache_s
     uint32_t block_num;	//Valid data's block
     uint32_t cache_size;
     uint32_t cache_flag;
-    char *cache;
-    char *iocache;
+    unsigned char *cache;
+    unsigned char *iocache;
 };
 
 struct hd_pthread_s

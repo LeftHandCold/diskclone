@@ -198,4 +198,6 @@ hd_write_block(hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf
             buf += count * disk->sector_size;
         }
     }
+
+	return 0;
 }

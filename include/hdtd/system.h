@@ -55,16 +55,7 @@ typedef unsigned __int64 uint64_t;
 #include "unistd.h"
 static inline int xusleep(useconds_t usec)
 {
-#ifdef HAVE_NANOSLEEP
-	struct timespec waittime = {
-		.tv_sec   =  usec / 1000000L,
-		.tv_nsec  = (usec % 1000000L) * 1000
-	};
-	return nanosleep(&waittime, NULL);
-#elif defined(HAVE_USLEEP)
 	return usleep(usec);
-#else
-#endif
 }
 
 #include <sys/stat.h>

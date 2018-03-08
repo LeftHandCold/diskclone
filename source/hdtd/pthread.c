@@ -319,7 +319,7 @@ alloc_copy_cache(hd_context *ctx, uint32_t sector_size)
 {
     size_t len;
     hd_copy_cache *p_cache;
-    char *cache_addr;
+    unsigned char *cache_addr;
     int i;
 
     if(ctx->pthread->copy_cache)
@@ -336,7 +336,7 @@ alloc_copy_cache(hd_context *ctx, uint32_t sector_size)
         hd_throw(ctx, HD_ERROR_GENERIC, "alloc_copy_cache is failed");
 
     p_cache = ctx->pthread->copy_cache;
-    cache_addr = (char*)ctx->pthread->copy_cache + (ctx->pthread->producer_thread_num * 2)*sizeof(hd_copy_cache);
+    cache_addr = (unsigned char*)ctx->pthread->copy_cache + (ctx->pthread->producer_thread_num * 2)*sizeof(hd_copy_cache);
     for(i=0; i<ctx->pthread->producer_thread_num*2; i++) {
         p_cache->firstblock = 0;
         p_cache->block_num = 0;
