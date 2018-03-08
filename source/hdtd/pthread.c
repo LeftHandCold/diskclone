@@ -118,13 +118,13 @@ __retry:
         {
             p = list_first(&ctx->pthread->avail_cache);
             data = list_entry(p, hd_copy_cache, list);
-            p = p->next;
+            /*p = p->next;
             if(p == &ctx->pthread->avail_cache) {
                 data = NULL;
                 goto __retry;
             } else {
                 data = list_entry(p, hd_copy_cache, list);
-            }
+            }*/
 
             list_del(p);
             data->consumer = consumer;
