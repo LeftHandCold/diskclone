@@ -58,7 +58,8 @@ int dos_get_volume_label(hd_context *ctx, dos_disk *disk)
     uint8_t ret,curpart;
     curpart = 0;
 
-    for (int i = 0; i < 4; i++)
+    int i;
+    for (i = 0; i < 4; i++)
     {
         ret = 0;
         if ( mbr->partition[i].pid == 0x05 || mbr->partition[i].pid == 0x0f )
