@@ -27,6 +27,11 @@ struct gpt_legacy_mbr {
     uint16_t            signature;
 } __attribute__ ((packed));
 
+/* only checking that the GUID is 0 is enough to verify an empty partition. */
+#define GPT_UNUSED_ENTRY_GUID						\
+	((struct gpt_guid) { 0x00000000, 0x0000, 0x0000, 0x00, 0x00,	\
+			     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }})
+
 static ssize_t read_lba(gpt_disk *disk, uint64_t lba,
                         void *buffer, const size_t bytes)
 {
@@ -327,6 +332,7 @@ int gpt_probe_label(hd_context *ctx, gpt_disk *disk)
     if (!disk->pheader)
         return 0;
 
+    disk->super.nparts_max = le32_to_cpu(disk->pheader->npartition_entries);
 
     return 1;
 }

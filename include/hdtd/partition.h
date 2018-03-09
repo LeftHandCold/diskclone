@@ -18,20 +18,23 @@
 typedef struct hd_part_handler_s hd_part_handler;
 
 typedef void (hd_part_drop_fn)(hd_context *ctx, hd_part *part);
-typedef int (hd_part_probe_fn)(hd_context *ctx, hd_part *disk);
+typedef int (hd_part_probe_fn)(hd_context *ctx, hd_disk *disk, hd_part *part);
 typedef void (hd_part_clone_fn)(hd_context *ctx, hd_disk *disk, hd_part *part);
 
 struct hd_part_s
 {
 	int refs;
 
+    const char *name;
 	int dev_fd;
     uint8_t type;
     uint32_t scan_buffer_size;
     unsigned char *scan_buffer;
     uint64_t total_sector;
     uint32_t secperclr;
+
 	uint64_t beginsector;
+    uint64_t partition_info_sector;
 
 	uint32_t bitmap_size;
 	unsigned char *bitmap;

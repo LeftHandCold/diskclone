@@ -69,4 +69,27 @@
 #define LINUX_RAID_PARTITION			0x0FD	// AUTODETECT RAID PARTITION
 #define UNKNOWN_PARTITION				0xff
 
+typedef struct com_parptition_s com_parptition;
+typedef struct com_mbr_s com_mbr;
+
+#pragma pack(1)
+struct com_parptition_s
+{
+    uint8_t	    id;
+    uint8_t	    beginhead;
+    uint16_t	beginCylnAndsector;
+    uint8_t	    pid;
+    uint8_t	    endHead;
+    uint16_t	endCylnAndSector;
+    uint32_t	relativeSectors;
+    uint32_t	totalsectors;
+};
+
+struct com_mbr_s
+{
+    uint8_t			        byRedundance[446];
+    com_parptition		    partition[4];
+    uint16_t			    byEnding;
+};
+#pragma pack()
 #endif //DISKCLONE_HDTD_BIOSDISK_H

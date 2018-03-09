@@ -18,6 +18,18 @@ typedef struct hd_disk_s hd_disk;
 typedef struct hd_disk_handler_s hd_disk_handler;
 typedef struct hd_part_s hd_part;
 
+#define ID_LEN 32
+#define MAX_PART_NUM 32
+
+struct hd_volume
+{
+	int8_t id[ID_LEN];
+	uint64_t beginsector;
+	uint64_t partition_info_sector;
+    uint64_t total_sectors;
+
+};
+
 struct hd_disk_dest_s
 {
 	int refs;
@@ -28,21 +40,28 @@ struct hd_disk_dest_s
 };
 
 typedef void (hd_disk_drop_fn)(hd_context *ctx, hd_disk *disk);
-
 typedef int (hd_disk_probe_fn)(hd_context *ctx, hd_disk *disk);
-typedef int (hd_write_block_fn) (hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf, uint64_t block, uint32_t number);
+typedef int (hd_disk_get_volume_fn)(hd_context *ctx, hd_disk *disk);
+typedef int (hd_write_block_fn) (hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf,
+								 uint64_t block, uint32_t number);
+
 
 struct hd_disk_s
 {
 	int refs;
 
 	uint32_t sector_size;
+    const char *name;
+
+	struct hd_volume volume[MAX_PART_NUM];
+    size_t volume_num;
+	size_t	nparts_max;	/* maximal number of partitions */
 
 	hd_disk_dest *disk_dest;
 	hd_disk_drop_fn *drop_disk;
     hd_disk_probe_fn *probe_disk;
+	hd_disk_get_volume_fn *get_volume;
 	hd_write_block_fn *write_block;
-
 };
 
 

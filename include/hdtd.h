@@ -17,6 +17,8 @@ extern "C" {
 #include "hdtd/context.h"
 #include "hdtd/list.h"
 
+#include "hdtd/path.h"
+
 #include "hdtd/string-util.h"
 #include "hdtd/crc32.h"
 

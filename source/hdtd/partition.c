@@ -74,9 +74,9 @@ hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname)
         int rc = 0;
         hd_part *part;
         part = ph->handler[i]->open(ctx, disk, partname);
-
+        part->name = partname;
         if (part->probe_part)
-            rc = part->probe_part(ctx, part);
+            rc = part->probe_part(ctx, disk, part);
 
 
         if(rc != 1)

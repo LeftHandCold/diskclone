@@ -31,6 +31,7 @@ dos_new_disk(hd_context *ctx, int dev_fd)
     dos_disk *disk = hd_new_derived_disk(ctx, dos_disk);
     disk->super.drop_disk = (hd_disk_drop_fn *)dos_drop_disk_imp;
     disk->super.probe_disk = (hd_disk_probe_fn *)dos_probe_label;
+    disk->super.get_volume = (hd_disk_get_volume_fn *)dos_get_volume_label;
     disk->super.sector_size = DEFAULT_SECTOR_SIZE;
 
     disk->dev_fd = dev_fd;

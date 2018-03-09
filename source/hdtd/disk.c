@@ -94,6 +94,9 @@ hd_open_disk(hd_context *ctx, const char *src, const char *dest)
             continue;
         }
 
+        disk->name = src;
+
+        disk->volume_num = disk->get_volume(ctx, disk);
         hd_try(ctx)
             hd_open_dest_disk(ctx, disk, dest);
         hd_catch(ctx)
@@ -174,11 +177,6 @@ hd_write_block(hd_context *ctx, hd_disk *disk, hd_part *part, unsigned char *buf
             count = number;
             if (count > COPY_IO_UNIT_SIZE)
                 count = COPY_IO_UNIT_SIZE;
-
-            /*FIXME:beginsector set 0 when debug*/
-            ////////////////////////////////////
-            part->beginsector = 0;/////////////
-            //////////////////////////////////
 
             sector = block + part->beginsector;
 

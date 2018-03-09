@@ -19,7 +19,7 @@ ntfs_init_bitmap(hd_context *ctx, ntfs_part *part)
 }
 
 int
-ntfs_probe_label(hd_context *ctx, ntfs_part *part)
+ntfs_probe_label(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 {
     ntfs_bpb *pntfs = (ntfs_bpb *)part->super.scan_buffer;
 
@@ -29,6 +29,12 @@ ntfs_probe_label(hd_context *ctx, ntfs_part *part)
         part->super.secperclr = pntfs->SecPerClr;
         part->super.type = NTFS;
         part->pntfs = pntfs;
+
+        int index = atoi(&part->super.name[strlen(part->super.name) - 1]);
+
+        part->super.beginsector = disk->volume[index - 1].beginsector;
+        part->super.partition_info_sector = disk->volume[index - 1].beginsector;
+
         return 1;
     }
     return 0;

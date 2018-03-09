@@ -11,5 +11,6 @@ static inline int mbr_is_valid_magic(const unsigned char *mbr)
 }
 
 int dos_probe_label(hd_context *ctx, dos_disk *disk);
+int dos_get_volume_label(hd_context *ctx, dos_disk *disk);
 
 #endif //DISKCLONE_DOS_MBR_H

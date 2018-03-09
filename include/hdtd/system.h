@@ -46,6 +46,16 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h> /* needed for int64_t */
 #endif
 
+#ifdef O_CLOEXEC
+#define UL_CLOEXECSTR	"e"
+#else
+#define UL_CLOEXECSTR	""
+#endif
+
+#ifndef O_CLOEXEC
+#define O_CLOEXEC 0
+#endif
+
 /*
  * The usleep function was marked obsolete in POSIX.1-2001 and was removed
  * in POSIX.1-2008.  It was replaced with nanosleep() that provides more

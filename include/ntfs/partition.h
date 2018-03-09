@@ -58,6 +58,6 @@ struct ntfs_part_s
 };
 
 
-int ntfs_probe_label(hd_context *ctx, ntfs_part *part);
+int ntfs_probe_label(hd_context *ctx, hd_disk *disk, ntfs_part *part);
 void ntfs_part_clone(hd_context *ctx, hd_disk *disk, ntfs_part *part);
 #endif //DISKCLONE_NTFS_PARTITION_H
