@@ -68,6 +68,7 @@ void hd_register_part_handlers(hd_context *ctx);
 
 hd_part *hd_open_part(hd_context *ctx, hd_disk *disk, const char *partname);
 void hd_clone_part(hd_context *ctx, hd_disk *disk, hd_part *part);
+void hd_clone_part_info(hd_context *ctx, hd_disk *disk, hd_part *part);
 
 void hd_drop_part(hd_context *ctx, hd_part *part);
 

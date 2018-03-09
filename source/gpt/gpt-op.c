@@ -37,9 +37,9 @@ static ssize_t read_lba(gpt_disk *disk, uint64_t lba,
 {
     off_t offset = lba * disk->super.sector_size;
 
-    if (lseek(disk->dev_fd, offset, SEEK_SET) == (off_t) -1)
+    if (lseek(disk->super.dev_fd, offset, SEEK_SET) == (off_t) -1)
         return -1;
-    return read(disk->dev_fd, buffer, bytes) != (ssize_t)bytes;
+    return read(disk->super.dev_fd, buffer, bytes) != (ssize_t)bytes;
 }
 
 /* Check if there is a valid header signature */
@@ -133,9 +133,9 @@ static gpt_entry *gpt_read_entries(gpt_disk *disk,
     offset = le64_to_cpu(header->partition_entry_lba) *
             disk->super.sector_size;
 
-    if (offset != lseek(disk->dev_fd, offset, SEEK_SET))
+    if (offset != lseek(disk->super.dev_fd, offset, SEEK_SET))
         goto fail;
-    if (sz != read(disk->dev_fd, ret, sz))
+    if (sz != read(disk->super.dev_fd, ret, sz))
         goto fail;
 
     return ret;

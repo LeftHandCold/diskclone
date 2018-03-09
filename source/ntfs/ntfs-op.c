@@ -30,8 +30,8 @@ ntfs_probe_label(hd_context *ctx, hd_disk *disk, ntfs_part *part)
         part->super.type = NTFS;
         part->pntfs = pntfs;
 
+        /*FIXME:Associate the partition number in a simple way,without considering LVM*/
         int index = atoi(&part->super.name[strlen(part->super.name) - 1]);
-
         part->super.beginsector = disk->volume[index - 1].beginsector;
         part->super.partition_info_sector = disk->volume[index - 1].beginsector;
 

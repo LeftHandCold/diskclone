@@ -50,6 +50,7 @@ struct hd_disk_s
 {
 	int refs;
 
+	int dev_fd;         /* device descriptor */
 	uint32_t sector_size;
     const char *name;
 

@@ -9,7 +9,7 @@ gpt_read_first_sector(hd_context *ctx, gpt_disk *disk)
 {
     disk->first_sector = hd_calloc(ctx, 1, disk->super.sector_size);
     memset(disk->first_sector, 0, disk->super.sector_size);
-    hd_read_write_device(ctx, disk->dev_fd, false, disk->first_sector, 0, disk->super.sector_size);
+    hd_read_write_device(ctx, disk->super.dev_fd, false, disk->first_sector, 0, disk->super.sector_size);
 }
 
 static void
@@ -26,7 +26,7 @@ gpt_drop_disk_imp(hd_context *ctx, gpt_disk *disk)
         disk->ents = NULL;
         disk->pheader = NULL;
 
-        SAFE_DEV_CLOSE(disk->dev_fd);
+        SAFE_DEV_CLOSE(disk->super.dev_fd);
     }
     hd_catch(ctx)
         hd_rethrow(ctx);
@@ -40,7 +40,7 @@ gpt_new_disk(hd_context *ctx, int dev_fd)
     disk->super.probe_disk = (hd_disk_probe_fn *)gpt_probe_label;
     disk->super.sector_size = DEFAULT_SECTOR_SIZE;
 
-    disk->dev_fd = dev_fd;
+    disk->super.dev_fd = dev_fd;
 
     return disk;
 }

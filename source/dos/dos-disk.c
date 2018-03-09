@@ -8,7 +8,7 @@ dos_read_first_sector(hd_context *ctx, dos_disk *disk)
 {
     disk->first_sector = hd_calloc(ctx, 1, disk->super.sector_size);
     memset(disk->first_sector, 0, disk->super.sector_size);
-    hd_read_write_device(ctx, disk->dev_fd, false, disk->first_sector, 0, disk->super.sector_size);
+    hd_read_write_device(ctx, disk->super.dev_fd, false, disk->first_sector, 0, disk->super.sector_size);
 }
 
 static void
@@ -19,7 +19,7 @@ dos_drop_disk_imp(hd_context *ctx, dos_disk *disk)
         if (disk->first_sector != NULL)
             hd_free(ctx, disk->first_sector);
 
-        SAFE_DEV_CLOSE(disk->dev_fd);
+        SAFE_DEV_CLOSE(disk->super.dev_fd);
     }
     hd_catch(ctx)
         hd_rethrow(ctx);
@@ -34,7 +34,7 @@ dos_new_disk(hd_context *ctx, int dev_fd)
     disk->super.get_volume = (hd_disk_get_volume_fn *)dos_get_volume_label;
     disk->super.sector_size = DEFAULT_SECTOR_SIZE;
 
-    disk->dev_fd = dev_fd;
+    disk->super.dev_fd = dev_fd;
 
     return disk;
 }

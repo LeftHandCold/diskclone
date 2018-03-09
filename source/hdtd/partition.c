@@ -101,6 +101,24 @@ hd_clone_part(hd_context *ctx, hd_disk *disk, hd_part *part)
 }
 
 void
+hd_clone_part_info(hd_context *ctx, hd_disk *disk, hd_part *part)
+{
+    unsigned char *buf;
+    hd_try(ctx)
+    {
+        /*TODO:test mbr*/
+        buf = hd_malloc(ctx, 2048 * 512);
+        hd_read_write_device(ctx, disk->dev_fd, false, buf, 0, 2 * disk->sector_size);
+        hd_read_write_device(ctx, disk->disk_dest->dev_fd, true, buf, 0, 2 * disk->sector_size);
+    }
+    hd_catch(ctx)
+    {
+        hd_free(ctx, buf);
+        hd_rethrow(ctx);
+    }
+}
+
+void
 hd_drop_part(hd_context *ctx, hd_part *part)
 {
     if (hd_drop_imp(ctx, part, &part->refs))

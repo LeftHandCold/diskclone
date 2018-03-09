@@ -9,8 +9,6 @@ struct gpt_disk_s
 {
     hd_disk super;
 
-    int dev_fd;         /* device descriptor */
-
     unsigned char *first_sector; /* buffer with master boot record */
 
     /* gpt specific part */

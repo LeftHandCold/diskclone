@@ -46,7 +46,7 @@ void main()
 
     /* Open the disk. */
     hd_try(ctx)
-        part = hd_open_part(ctx, disk, "F:/disk/ntfs");
+        part = hd_open_part(ctx, disk, "F:/disk/ntfs1");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open part: %s\n", hd_caught_message(ctx));
         hd_drop_disk(ctx, disk);
@@ -57,6 +57,7 @@ void main()
     hd_try(ctx)
     {
         hd_clone_part(ctx, disk, part);
+        hd_clone_part_info(ctx, disk, part);
     }
     hd_catch(ctx)
     {
