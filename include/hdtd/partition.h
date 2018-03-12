@@ -83,4 +83,6 @@ void hd_set_data_bitmap(hd_context *ctx, hd_part *part, uint64_t sector, uint64_
 
 bool hd_read_bit(unsigned char *bitmap, uint64_t block);
 
+void hd_init_bitmap(hd_context *ctx, hd_part *part);
+
 #endif //DISKCLONE_HDTD_PARTITION_H

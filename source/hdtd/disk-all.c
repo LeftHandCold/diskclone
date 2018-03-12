@@ -21,9 +21,14 @@ void hd_register_disk_handlers(hd_context *ctx)
 }
 
 extern hd_part_handler ntfs_part_handler;
+extern hd_part_handler ext_part_handler;
 
 void hd_register_part_handlers(hd_context *ctx)
 {
+#if HD_ENABLE_EXT
+    hd_register_part_handler(ctx, &ext_part_handler);
+#endif /* HD_ENABLE_EXT */
+
 #if HD_ENABLE_NTFS
     hd_register_part_handler(ctx, &ntfs_part_handler);
 #endif /* HD_ENABLE_NTFS */

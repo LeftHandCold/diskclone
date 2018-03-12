@@ -11,7 +11,8 @@
  * @param size
  * @param part
  */
-void ntfs_parse_runs(unsigned char* runs, int64_t *addr, uint64_t *size, ntfs_part *part)
+static void
+ntfs_parse_runs(unsigned char* runs, int64_t *addr, uint64_t *size, ntfs_part *part)
 {
     uint16_t	cbsize, cbaddr;
     cbsize = LOB(runs[0]);

@@ -5,19 +5,6 @@
 #include "hdtd.h"
 #include "ntfs.h"
 
-static void
-ntfs_init_bitmap(hd_context *ctx, ntfs_part *part)
-{
-    uint64_t total_block;
-    total_block = (part->super.total_sector + COPY_BLOCK_SIZE - 1) / COPY_BLOCK_SIZE;
-    part->super.bitmap_size = (uint32_t)(((total_block + 7)/8 + 0xfff) & ~0xfff);
-
-    part->super.bitmap = hd_malloc(ctx, part->super.bitmap_size);
-    if (!part->super.bitmap)
-        hd_throw(ctx, HD_ERROR_GENERIC, "failed to malloc bitmap, size %d errno %d", part->super.bitmap_size, errno);
-    memset(part->super.bitmap, 0, part->super.bitmap_size);
-}
-
 int
 ntfs_probe_label(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 {
@@ -43,7 +30,7 @@ ntfs_probe_label(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 void
 ntfs_part_clone(hd_context *ctx, hd_disk *disk, ntfs_part *part)
 {
-    ntfs_init_bitmap(ctx, part);
+    hd_init_bitmap(ctx, &part->super);
 
     ntfs_scan_init(ctx, disk, part);
 

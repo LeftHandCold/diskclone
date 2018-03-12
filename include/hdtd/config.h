@@ -17,4 +17,8 @@
 #define HD_ENABLE_NTFS 1
 #endif /* HD_ENABLE_NTFS */
 
+#ifndef HD_ENABLE_EXT
+#define HD_ENABLE_EXT 1
+#endif /* HD_ENABLE_NTFS */
+
 #endif //DISKCLONE_HDTDCONFIG_H
