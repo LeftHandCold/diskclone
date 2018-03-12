@@ -21,6 +21,7 @@ ALL_DIR += $(OUT)/source/hdtd
 ALL_DIR += $(OUT)/source/dos
 ALL_DIR += $(OUT)/source/gpt
 ALL_DIR += $(OUT)/source/ntfs
+ALL_DIR += $(OUT)/source/ext
 
 # --- Commands ---
 
@@ -68,21 +69,25 @@ HDTDHDR := include/hdtd.h $(wildcard include/hdtd/*.h)
 DOS_HDR := include/dos.h $(wildcard include/dos/*.h)
 GPT_HDR := include/gpt.h $(wildcard include/gpt/*.h)
 NTFS_HDR := include/ntfs.h $(wildcard include/ntfs/*.h)
+EXT_HDR := include/ntfs.h $(wildcard include/ext/*.h)
 
 HDTDSRC := $(sort $(wildcard source/hdtd/*.c))
 DOS_SRC := $(sort $(wildcard source/dos/*.c))
 GPT_SRC := $(sort $(wildcard source/gpt/*.c))
 NTFS_SRC := $(sort $(wildcard source/ntfs/*.c))
+EXT_SRC := $(sort $(wildcard source/ext/*.c))
 
 HDTDSRC_HDR := $(wildcard source/hdtd/*.h)
 DOS_SRC_HDR := $(wildcard source/dos/*.h)
 GPT_SRC_HDR := $(wildcard source/gpt/*.h)
 NTFS_SRC_HDR := $(wildcard source/ntfs/*.h)
+EXT_SRC_HDR := $(wildcard source/ext/*.h)
 
 HDTDOBJ := $(HDTDSRC:%.c=$(OUT)/%.o)
 DOS_OBJ := $(DOS_SRC:%.c=$(OUT)/%.o)
 GPT_OBJ := $(GPT_SRC:%.c=$(OUT)/%.o)
 NTFS_OBJ := $(NTFS_SRC:%.c=$(OUT)/%.o)
+EXT_OBJ := $(EXT_SRC:%.c=$(OUT)/%.o)
 
 $(HDTDOBJ) : $(HDTDHDR) $(HDTDSRC_HDR)
 $(DOS_OBJ) : $(HDTDHDR) $(DOS_HDR) $(DOS_SRC_HDR)
@@ -90,7 +95,8 @@ $(GPT_OBJ) : $(HDTDHDR) $(GPT_HDR) $(GPT_SRC_HDR)
 $(NTFS_OBJ) : $(HDTDHDR) $(NTFS_HDR) $(NTFS_SRC_HDR)
 $(DOS_OBJ) : $(HDTDSRC_HDR) 
 $(GPT_OBJ) : $(HDTDSRC_HDR) 
-$(NTFS_OBJ) : $(HDTDSRC_HDR) 
+$(NTFS_OBJ) : $(HDTDSRC_HDR)
+$(EXT_OBJ) : $(HDTDSRC_HDR)
 
 
 # --- Library ---
@@ -102,6 +108,7 @@ MHDDISKCLOEN_OBJ := \
 	$(DOS_OBJ) \
 	$(GPT_OBJ) \
 	$(NTFS_OBJ) \
+	$(EXT_OBJ) \
 
 $(HDDISKCLOEN_LIB) : $(MHDDISKCLOEN_OBJ)
 
