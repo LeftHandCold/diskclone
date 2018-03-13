@@ -4,7 +4,7 @@
 
 #include "hdtd.h"
 
-void main()
+int main()
 {
     hd_context *ctx;
     hd_disk *disk;
@@ -13,7 +13,7 @@ void main()
     if (!ctx)
     {
         fprintf(stderr, "cannot create diskclone context\n");
-        return ;
+        return 0;
     }
 
     /* Register the default disk types to handle. */
@@ -23,7 +23,7 @@ void main()
     {
         fprintf(stderr, "cannot register disk handlers: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
-        return;
+        return 0;
     }
     /* Open the part. */
     hd_try(ctx)
@@ -31,7 +31,7 @@ void main()
     hd_catch(ctx) {
         fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
-        return ;
+        return 0;
     }
     /* Register the default part types to handle. */
     hd_try(ctx)
@@ -41,7 +41,7 @@ void main()
         fprintf(stderr, "cannot register part handlers: %s\n", hd_caught_message(ctx));
 		hd_drop_disk(ctx, disk);
         hd_drop_context(ctx);
-        return;
+        return 0;
     }
 
     /* Open the disk. */
@@ -51,7 +51,7 @@ void main()
         fprintf(stderr, "cannot open part: %s\n", hd_caught_message(ctx));
         hd_drop_disk(ctx, disk);
         hd_drop_context(ctx);
-        return ;
+        return 0;
     }
 
     hd_try(ctx)
@@ -65,7 +65,7 @@ void main()
         hd_drop_part(ctx, part);
         hd_drop_disk(ctx, disk);
         hd_drop_context(ctx);
-        return;
+        return 0;
     }
 
 	hd_drop_part(ctx, part);
@@ -73,4 +73,5 @@ void main()
 	hd_drop_context(ctx);
 
     printf("main is end\n");
+	return 0;
 }

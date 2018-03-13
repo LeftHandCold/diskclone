@@ -24,7 +24,7 @@ hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, u
 
     r = lseek(fd, start, SEEK_SET);
     if (r == -1) {
-        hd_throw(ctx, HD_ERROR_GENERIC, "failed to seek to offset %d: %lu, errno %d", size, start, errno);
+        hd_throw(ctx, HD_ERROR_GENERIC, "failed to seek to offset %zu: %llu, errno %d", size, start, errno);
     }
 
     if(bwrite)
@@ -35,7 +35,7 @@ hd_read_write_device(hd_context *ctx, int fd, bool bwrite, unsigned char *buf, u
     if (r < 0 || r != (ssize_t)size) {
         if (!errno)
             errno = EINVAL;	// probably too small file/device
-        hd_throw(ctx, HD_ERROR_GENERIC, "failed to %s device from offset %u: %ju, errno %d",
+        hd_throw(ctx, HD_ERROR_GENERIC, "failed to %s device from offset %zu: %llu, errno %d",
                  bwrite?"write":"read", size, start, errno);
     }
 
