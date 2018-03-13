@@ -47,8 +47,9 @@ ext_scan_init(hd_context *ctx, hd_disk *disk, ext_part *part)
     buffer_size = (((part->blocks_per_group + 7)/8 + block_size - 1) & ~(block_size - 1));
     bitmap_size = buffer_size / disk->sector_size;
     total = part->groups_count * bitmap_size;
-    hd_warn(ctx, "*** blockspergroup(%d), blocksize %d. bitmapsize %d. first data block %d.",
-            part->blocks_per_group , block_size,bitmap_size, part->first_data_block);
+
+    printf("*** blockspergroup(%d), blocksize %d. bitmapsize %d. first data block %d.\n",
+           part->blocks_per_group , block_size,bitmap_size, part->first_data_block);
 
     if (buffer_size > part->super.scan_buffer_size)
     {
@@ -76,7 +77,7 @@ ext_scan_init(hd_context *ctx, hd_disk *disk, ext_part *part)
         {
             count = bitmap_size;
             fat_sector = get_ext_bitmap_sector(ctx, disk, part, group_index, scan);
-            hd_warn(ctx, "*** groupindex(%d), fatSector(%lld), count %d.", group_index, fat_sector, count);
+            printf("*** groupindex(%d), fatSector(%lld), count %d.\n", group_index, fat_sector, count);
             if (fat_sector == 0)
             {
                 total -= count;
@@ -105,7 +106,7 @@ ext_scan_init(hd_context *ctx, hd_disk *disk, ext_part *part)
                 count = part->blocks_per_group;
             count = (count + 7) / 8;
 
-            hd_warn(ctx, "*** cluster %lld. count %d. secperclr %d sector %lld..\n",
+            printf("*** cluster %lld. count %d. secperclr %d sector %lld..\n",
                     cluster, count, part->super.secperclr, cluster * part->super.secperclr);
             for (i = 0; i<count; i++)
             {
