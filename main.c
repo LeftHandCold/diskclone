@@ -27,7 +27,7 @@ int main()
     }
     /* Open the part. */
     hd_try(ctx)
-        disk = hd_open_disk(ctx, "F:/disk/mbr", "F:/disk/test");
+        disk = hd_open_disk(ctx, "/dev/sdb", "/dev/sdc");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open disk: %s\n", hd_caught_message(ctx));
         hd_drop_context(ctx);
@@ -46,7 +46,7 @@ int main()
 
     /* Open the disk. */
     hd_try(ctx)
-        part = hd_open_part(ctx, disk, "F:/disk/ntfs1");
+        part = hd_open_part(ctx, disk, "/dev/sdb1");
     hd_catch(ctx) {
         fprintf(stderr, "cannot open part: %s\n", hd_caught_message(ctx));
         hd_drop_disk(ctx, disk);
