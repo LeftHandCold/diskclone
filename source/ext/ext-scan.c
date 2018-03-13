@@ -23,7 +23,7 @@ get_ext_bitmap_sector(hd_context *ctx, hd_disk *disk, ext_part *part, uint32_t g
         scan->current_group_desc = scan->group_desc;
         sector = part->group_desc_sector;
 
-        hd_read_write_device(ctx, part->super.dev_fd, false, scan->current_group_desc, sector * disk->sector_size, desc_size / disk->sector_size);
+        hd_read_write_device(ctx, part->super.dev_fd, false, scan->current_group_desc, sector * disk->sector_size, desc_size);
     }
 
     group_desc = (ext3_group_desc *)scan->current_group_desc + group_index;
@@ -133,7 +133,6 @@ ext_scan_init(hd_context *ctx, hd_disk *disk, ext_part *part)
     {
         hd_free(ctx, scan->group_desc);
         scan->group_desc = NULL;
-        hd_free(ctx, scan->current_group_desc);
         scan->current_group_desc = NULL;
         hd_free(ctx, scan);
         scan = NULL;
