@@ -11,8 +11,8 @@
   
 
 # Limitations
-  * Can only run on the linux platform.
-  * Does not support other disk or partition formats other than in Features.
+  * Can only run on the linux platform.
+  * Does not support other disk or partition formats other than in Features.
   
 ## Repository contents
 
